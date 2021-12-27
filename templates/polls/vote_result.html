@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <section>
+        <div class="jumbotron">
+            <div class="text-center">
+                <h1 >투표결과</h1>
+            </div>
+        </div>
+        <h4 style="margin: 20px 280px;">{{ question.question_text }}</h4>
+        <ul style="width:500px; margin:0 auto";>
+        {% for choice in question.choice_set.all %}
+        <li style="margin: 20px;">
+            <p style="font-size:1.2rem;">{{ choice.choice_text }} -- {{ choice.votes }}votes</p>
+        </li>
+        {% endfor %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

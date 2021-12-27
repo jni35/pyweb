@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <section>
+        <div class="jumbotron">
+            <div class="text-center">
+                <h1 >투표하기</h1>
+            </div>
+        </div>
+        <h4 style="margin: 20px 280px;">{{ question.question_text }}</h4>
+        <form action="{% url 'poll:vote' question.id %}" method="post"
+            style="width:500px; margin:0 auto;">
+            {% csrf_token %}
+            {% if error %}
+                <p style="font-size:1.2rem;">{{ errors }}</p>
+            {% endif %}
+            {% for choice in question.choice_set.all %}
+            <p style="font-size:1.2rem;">
+                <input type="radio" name="choice" id="choice" value="{{ choice.id }}">
+                <label for="choice">{{ choice.choice_text }}</label>
+            </p>
+            {% endfor %}
+            <p><input type="submit" value="투표"></p>
+        </form>
+    </section>
+</div>
+{% endblock %}

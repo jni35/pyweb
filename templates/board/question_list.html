@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load board_filter %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr class="text-center thead-dark">
+                <th>번호</th><th>제목</th><th>글쓴이</th><th>작성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if question_list %}
+                {% for question in question_list  %}
+                <tr class="text-center">
+<!--                    <td>{{ forloop.counter }}</td>-->
+                    <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1}}</td>
+                    <td class="text-left">
+                        <!--링크 경로는 앱 네임을 사용함-->
+                        <a href="{% url 'board:detail' question.id %}">
+                            {{ question.subject }}
+                        </a>
+                        {% if question.answer_set.count > 0 %}
+                        <span class="text-danger small">[{{ question.answer_set.count }}]</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ question.author.username }}</td>
+                    <td>{{ question.create_date }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <p>질문이 없습니다.</p>
+            {% endif %}
+        </tbody>
+    </table>
+<!-- 페이징 처리 시작 -->
+    <ul class="pagination justify-content-center">
+<!-- 이전 페이지-->
+        {% if question_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ question_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disable">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+<!-- 페이지 리스트 -->
+        {% for page_number in question_list.paginator.page_range %}
+            {% if page_number == question_list.number %}
+            <li class="page-item active" aria-current="page">   <!--번호활성화-->
+                <a class="page-link"
+                    href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+<!-- 다음 페이지-->
+        {% if question_list.has_next %}
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ question_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disable">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+<!-- 페이징 처리 끝 -->
+    <a class="btn btn-primary"
+       href="{% url 'board:question_create' %}">질문 등록</a>
+</div>
+{% endblock %}
+

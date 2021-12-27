@@ -1,0 +1,28 @@
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <a class="navbar-brand" href="{% url 'board:index' %}">Pyweb</a>
+    <!--햄버거 메뉴 -->
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+<!-- 로그인 메뉴 -->
+    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                {% if user.is_authenticated %} <!-- 로그인(세션권한 인증) 되었다면 -->
+                    <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }}(로그아웃)</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'board:boardlist' %}">질문/답변</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'poll:index' %}">설문조사</a>
+            </li>
+        </ul>
+    </div>
+</nav>

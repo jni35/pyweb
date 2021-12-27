@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="container">
+    <section>
+        <div class="jumbotron">
+            <div class="text-center">
+                <h1>설문조사</h1>
+            </div>
+        </div>
+        <div class="row">
+            {% if question_list %}
+                {% for question in question_list %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <!--<a href="/poll/{{ question.id }}">{{ question.question_text }}</a>-->
+                            <a href="{% url 'poll:detail' question.id %}"><h5 style="line-height:2rem">{{ question.question_text }}</h5></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>설문이 없습니다.</p>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
