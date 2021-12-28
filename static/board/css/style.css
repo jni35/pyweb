@@ -1,0 +1,16 @@
+/*본문 스타일*/
+section{height: 750px;}
+
+/* footer 스타일*/
+footer{height:160px; margin-top:50px;}
+footer .list-inline{margin-left: 200px;}
+footer .list-inline li{display:inline-block; margin: 10px;}
+footer address{margin-left: 220px; color:#ccc;}
+footer address p{line-height: 1rem;}
+/*footer ul{list-style:none; padding-top:10px; margin-lite:200px;}
+footer ul li{display:inline; margin:10px}
+*/
+
+
+
+

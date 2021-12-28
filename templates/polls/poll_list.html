@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<div id="container">
+<div id="container my-3">
     <section>
-        <div class="jumbotron">
-            <div class="text-center">
-                <h1>설문조사</h1>
-            </div>
-        </div>
+        <h4 class="border-bottom py-2">설문목록</h4>
         <div class="row">
             {% if question_list %}
                 {% for question in question_list %}
-                <div class="col-4">
+                <div class="col-4 my-3">
                     <div class="card">
                         <div class="card-body">
-                            <!--<a href="/poll/{{ question.id }}">{{ question.question_text }}</a>-->
-                            <a href="{% url 'poll:detail' question.id %}"><h5 style="line-height:2rem">{{ question.question_text }}</h5></a>
+                            <div class="card-text" style="line-height:2rem">
+                                {{ question.question_text }}
+                            </div>
+                            <a href="{% url 'poll:detail' question.id %}" class="btn btn-primary mt-5"> 투표하기 &raquo;</a>
                         </div>
                     </div>
                 </div>

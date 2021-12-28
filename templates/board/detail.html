@@ -1,32 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+    <!-- 추천 오류 -->
+    {% if messages %}
+        <div class="alert alert-danger my-3" role="alert">
+        {% for message in messages %}
+            <strong>{{ message.tags }}</strong>
+            <ul>
+                <li>{{ message.massage }}</li>
+            </ul>
+        {% endfor %}
+        </div>
+    {% endif %}
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
-    <div class="card my-3">
-        <div class="card-body">
-            <div class="card-text" style="white-space:pre-line"> <!--style은 줄바꿈 출력-->
-                {{ question.content }}
+    <!-- 추천 영역 -->
+    <div class="row">
+        <div class="col-1">
+            <div class="bg-light text-center border font-weight-bolder p-3">
+                {{ question.voter.count }}
             </div>
-            <div class="d-flex justify-content-end"><!--오른쪽 정렬-->
-                {% if question.modify_date %}
-                <div class="badge badge-light text-left p-2">
-                    <div class="mb-2">modefied at</div>
-                    <div>{{ question.modify_date }}</div>
+            <a href="#" data-uri="{% url 'board:vote_question' question.id %}"
+               class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
+        </div>
+        <div class="col-11">
+        <!-- 질문 영역 -->
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="card-text" style="white-space:pre-line"> <!--style은 줄바꿈 출력-->
+                        {{ question.content }}
+                    </div>
+                    <div class="d-flex justify-content-end"><!--오른쪽 정렬-->
+                        {% if question.modify_date %}
+                        <div class="badge badge-light text-left p-2">
+                            <div class="mb-2">modefied at</div>
+                            <div>{{ question.modify_date }}</div>
+                        </div>
+                        {% endif %}
+                        <div class="badge badge-light text-left p-2">
+                            <div class="mb-2">{{ question.author }}</div>
+                            <div>{{ question.create_date }}</div>
+                        </div>
+                    </div>
+                    {% if request.user == question.author %}
+                    <div>
+                        <a href="{% url 'board:question_modify' question.id %}"
+                           class="btn btn-sm btn-outline-secondary">수정</a>
+                        <a href="#" data-uri="{% url 'board:question_delete' question.id %}"
+                           class="delete btn btn-sm btn-outline-secondary">삭제</a>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <div class="badge badge-light text-left p-2">
-                    <div class="mb-2">{{ question.author }}</div>
-                    <div>{{ question.create_date }}</div>
-                </div>
             </div>
-            {% if request.user == question.author %}
-            <div>
-                <a href="{% url 'board:question_modify' question.id %}"
-                   class="btn btn-sm btn-outline-secondary">수정</a>
-                <a href="#" data-uri="{% url 'board:question_delete' question.id %}"
-                   class="delete btn btn-sm btn-outline-secondary">삭제</a>
-            </div>
-            {% endif %}
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2">
@@ -90,9 +114,15 @@
     $(document).ready(function(){
         $(".delete").on('click', function(){
             if(confirm('정말로 삭제하시겠습니까?')){
-                location.href = $(this).data('uri')
+                location.href = $(this).data('uri');
+            }
+        });
+        $(".recommend").on('click', function(){
+            if(confirm("정말로 추천하시겠습니까?")){
+                location.href = $(this).data('uri');
             }
         });
     });
+
 </script>
 {% endblock %}

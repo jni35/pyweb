@@ -2,10 +2,11 @@
 {% load board_filter %}
 {% block content %}
 <div class="container my-3">
+    <section>
     <table class="table">
         <thead class="thead-dark">
             <tr class="text-center thead-dark">
-                <th>번호</th><th>제목</th><th>글쓴이</th><th>작성일시</th>
+                <th>번호</th><th>추천</th><th>제목</th><th>글쓴이</th><th>작성일시</th>
             </tr>
         </thead>
         <tbody>
@@ -14,6 +15,13 @@
                 <tr class="text-center">
 <!--                    <td>{{ forloop.counter }}</td>-->
                     <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1}}</td>
+                    <td>
+                        {% if question.voter.all.count > 0 %}
+                        <span class="badge badge-warning px-2 py-1">
+                            {{ question.voter.all.count }}
+                        </span>
+                        {% endif %}
+                    </td>
                     <td class="text-left">
                         <!--링크 경로는 앱 네임을 사용함-->
                         <a href="{% url 'board:detail' question.id %}">
@@ -71,6 +79,7 @@
 <!-- 페이징 처리 끝 -->
     <a class="btn btn-primary"
        href="{% url 'board:question_create' %}">질문 등록</a>
+    </section>
 </div>
 {% endblock %}
 

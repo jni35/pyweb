@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+    <section>
     <form method="post" class="post-form">
         {% csrf_token %}
         <!-- 오류 표시 시작-->
@@ -11,5 +12,6 @@
         </div>
         <input type="submit" value="저장하기" class="btn btn-primary">
     </form>
+    </section>
 </div>
 {% endblock %}
