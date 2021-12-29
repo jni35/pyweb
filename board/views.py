@@ -129,7 +129,7 @@ def vote_question(request, question_id):
         question.voter.add(request.user)    #추천 추가(로그인한 사람)
     return redirect('board:detail', question_id=question.id)
 
-
+#질문 답변
 @login_required(login_url='common:login')
 def comment_create_question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -146,3 +146,28 @@ def comment_create_question(request, question_id):
         form = CommentForm()
     context = {'form':form}
     return render(request, 'board/comment_form.html', context)
+
+#질문 댓글 삭제
+@login_required(login_url='common:login')
+def comment_delete_question(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.delete()
+    return redirect('board:detail', question_id=comment.question.id)\
+
+#질문 댓글 수정
+@login_required(login_url='common:login')
+def comment_modify_question(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)  #변경된 입력 내용
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.modify_date = timezone.now()
+            comment.save()
+            return redirect('board:detail', question_id=comment.question.id)
+    else:
+        form = CommentForm(instance=comment)    #채워진 폼
+    context = {'form':form}
+    return render(request, 'board/comment_form.html', context)
+
