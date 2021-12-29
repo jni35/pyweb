@@ -5,7 +5,7 @@
     <h5 class="border-bottom my-3 pb-2">질문 등록</h5>
     <form action="" method="post">
         {% csrf_token %}
-        <!-- 오류 표시 시작-->
+        <!-- 오류 표시 시작 -->
         {% if form.errors %}
         <div class="alert alert-danger">
             {% for field in form %}

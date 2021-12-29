@@ -3,7 +3,7 @@
 <div class="container my-3">
     <section>
         <h4 class="board-bottom py-2">투표하기</h4>
-        <div class="card my-3" style="width: 50rem">
+        <div class="card my-3">
             <h5 style="margin: 20px 100px 10px;">{{ question.question_text }}</h5>
             <form action="{% url 'poll:vote' question.id %}" method="post"
                 style="width:500px; margin: 20px 120px;">

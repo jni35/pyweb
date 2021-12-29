@@ -25,10 +25,10 @@ class Answer(models.Model):
         return self.content
 
 
-class comment(models.Model):
+class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     create_date = models.DateTimeField()    #작성일
     modify_date = models.DateTimeField(null=True, blank=True)
-    question = models.ForeignKey(Question, null=True, blank=True, on_delete=models.CASCADE)
-    answer = models.ForeignKey(Answer, null=True, blank=True, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, null=True, blank=True, on_delete=models.CASCADE)     #질문 댓글
+    answer = models.ForeignKey(Answer, null=True, blank=True, on_delete=models.CASCADE)     #답변 댓글

@@ -49,6 +49,22 @@
                            class="delete btn btn-sm btn-outline-secondary">삭제</a>
                     </div>
                     {% endif %}
+                    <!-- 댓글 영역 -->
+                    <div class="mt-3">
+                        {% for comment in question.comment_set.all %}
+                        <div class="comment my-2">
+                            <span style="white-space:pre-line">
+                                {{ comment.content }}
+                            </span>
+                            <span>
+                                -{{ comment.author }}, {{ comment.create_date }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <a href="{% url 'board:comment_create_question' question.id %}" class="small">댓글추가</a>
+                    </div>
                 </div>
             </div>
         </div>
