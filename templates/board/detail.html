@@ -58,10 +58,18 @@
                             </span>
                             <span>
                                 -{{ comment.author }}, {{ comment.create_date }}
+                                {% if comment.modify_date %}
+                                    (수정 : {{ comment.modify_date }})
+                                {% endif %}
                             </span>
                             {% if request.user == comment.author %}
+                            <!-- 제이쿼리 사용 -->
                             <a href="{% url 'board:comment_modify_question' comment.id %}">수정</a>
-                            <a href="#" class="delete" data-uri="{% url 'board:comment_delete_question' comment.id %}">삭제</a>
+                            <!-- <a href="#" class="delete" data-uri="{% url 'board:comment_delete_question' comment.id %}">삭제</a>-->
+
+                            <!-- 자바스크립트 사용-->
+                            <a onclick="return confirm('정말로 삭제하시겠습니까?')"
+                               href="{% url 'board:comment_delete_question' question.id %}">삭제</a>
                             {% endif %}
                         </div>
                         {% endfor %}
@@ -132,11 +140,13 @@
 {% block script %}
 <script>
     $(document).ready(function(){
+        //삭제처리
         $(".delete").on('click', function(){
             if(confirm('정말로 삭제하시겠습니까?')){
                 location.href = $(this).data('uri');
             }
         });
+        //추천 처리
         $(".recommend").on('click', function(){
             if(confirm("정말로 추천하시겠습니까?")){
                 location.href = $(this).data('uri');

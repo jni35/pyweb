@@ -3,83 +3,125 @@
 {% block content %}
 <div class="container my-3">
     <section>
-    <table class="table">
-        <thead class="thead-dark">
-            <tr class="text-center thead-dark">
-                <th>번호</th><th>추천</th><th>제목</th><th>글쓴이</th><th>작성일시</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if question_list %}
-                {% for question in question_list  %}
-                <tr class="text-center">
-<!--                    <td>{{ forloop.counter }}</td>-->
-                    <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1}}</td>
-                    <td>
-                        {% if question.voter.all.count > 0 %}
-                        <span class="badge badge-warning px-2 py-1">
-                            {{ question.voter.all.count }}
-                        </span>
-                        {% endif %}
-                    </td>
-                    <td class="text-left">
-                        <!--링크 경로는 앱 네임을 사용함-->
-                        <a href="{% url 'board:detail' question.id %}">
-                            {{ question.subject }}
-                        </a>
-                        {% if question.answer_set.count > 0 %}
-                        <span class="text-danger small">[{{ question.answer_set.count }}]</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ question.author.username }}</td>
-                    <td>{{ question.create_date }}</td>
+    <!-- 검색 입력 상자와 찾기 버튼-->
+        <div class="row justify-content-end mb-2">
+            <div class="col-4 input-group">
+                <input type="text" class="kw form-control" value="{{ kw|default_if_none:'' }}">
+                <div class="input-group-append">
+                    <button type="button" id="btn_search" class="btn btn-outline-secondary">찾기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 게시판 목록 -->
+        <table class="table">
+            <thead class="thead-dark">
+                <tr class="text-center thead-dark">
+                    <th>번호</th><th>추천</th><th>제목</th><th>글쓴이</th><th>작성일시</th>
                 </tr>
-                {% endfor %}
-            {% else %}
-            <p>질문이 없습니다.</p>
-            {% endif %}
-        </tbody>
-    </table>
-<!-- 페이징 처리 시작 -->
-    <ul class="pagination justify-content-center">
-<!-- 이전 페이지-->
-        {% if question_list.has_previous %}
-        <li class="page-item">
-            <a class="page-link"  href="?page={{ question_list.previous_page_number }}">이전</a>
-        </li>
-        {% else %}
-        <li class="page-item disable">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-        </li>
-        {% endif %}
-<!-- 페이지 리스트 -->
-        {% for page_number in question_list.paginator.page_range %}
-            {% if page_number == question_list.number %}
-            <li class="page-item active" aria-current="page">   <!--번호활성화-->
-                <a class="page-link"
-                    href="?page={{ page_number }}">{{ page_number }}</a>
-            </li>
-            {% else %}
+            </thead>
+            <tbody>
+                {% if question_list %}
+                    {% for question in question_list  %}
+                    <tr class="text-center">
+                        <!-- <td>{{ forloop.counter }}</td>-->
+                        <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1}}</td>
+                        <td>
+                            {% if question.voter.all.count > 0 %}
+                            <span class="badge badge-warning px-2 py-1">
+                                {{ question.voter.all.count }}
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-left">
+                            <!--링크 경로는 앱 네임을 사용함-->
+                            <a href="{% url 'board:detail' question.id %}">
+                                {{ question.subject }}
+                            </a>
+                            {% if question.answer_set.count > 0 %}
+                            <span class="text-danger small">[{{ question.answer_set.count }}]</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ question.author.username }}</td>
+                        <td>{{ question.create_date }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <p>질문이 없습니다.</p>
+                {% endif %}
+            </tbody>
+        </table>
+        <!-- 페이징 처리 시작 -->
+        <ul class="pagination justify-content-center">
+            <!-- 이전 페이지-->
+            {% if question_list.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+<!--                <a class="page-link"  href="?page={{ question_list.previous_page_number }}">이전</a>-->
+                <a class="page-link"  data-page="{{ question_list.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="page-item disable">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
             </li>
             {% endif %}
-        {% endfor %}
-<!-- 다음 페이지-->
-        {% if question_list.has_next %}
-        <li class="page-item">
-            <a class="page-link"  href="?page={{ question_list.next_page_number }}">다음</a>
-        </li>
-        {% else %}
-        <li class="page-item disable">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-        </li>
-        {% endif %}
-    </ul>
-<!-- 페이징 처리 끝 -->
-    <a class="btn btn-primary"
-       href="{% url 'board:question_create' %}">질문 등록</a>
+            <!-- 페이지 리스트 -->
+            {% for page_number in question_list.paginator.page_range %}
+                {% if page_number == question_list.number %}
+                <li class="page-item active" aria-current="page">   <!--번호활성화-->
+<!--                <a class="page-link"-->
+<!--                    href="?page={{ page_number }}">{{ page_number }}</a>-->
+                    <a class="page-link" href="#"
+                        data-page="{{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+<!--                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>-->
+                    <a class="page-link" href="#"
+                        data-page="{{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            <!-- 다음 페이지-->
+            {% if question_list.has_next %}
+            <li class="page-item">
+<!--                <a class="page-link"  href="?page={{ question_list.next_page_number }}">다음</a>-->
+                <a class="page-link"  data-page="{{ question_list.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item disable">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+        <!-- 페이징 처리 끝 -->
+        <a class="btn btn-primary"
+           href="{% url 'board:question_create' %}">질문 등록</a>
+        <!-- 검색 폼 만들기 -->
+        <form action="" method="get" id="searchForm">
+            <!-- page, kw는 get방식으로 요청-->
+            <input type="hidden" name="kw" id="kw">
+            <input type="hidden" name="page" id="page">
+        </form>
     </section>
 </div>
 {% endblock %}
+{% block script%}
+<script>
+    $(document).ready(function(){
+        //페이지 처리
+        $(".page-link").on('click',function(){      //페이지 번호를 클릭하면
+            $("#page").val($(this).data("page"));   //해당 페이지 번호를 입력 필드에 가져옴
+            $("#searchForm").submit();              //폼을 전송
+        });
 
+        //검색 처리
+        $("#btn_search").on('click', function(){
+            let text = $(".kw").val()               //검색어 값
+            $("#kw").val(text);                     //폼에 입력 필드에 설정
+            $("#page").val(1);                      //1페이지를 page 필드에 설정
+            $("#searchForm").submit();              //폼을 전송
+            });
+
+    });
+</script>
+{% endblock %}
