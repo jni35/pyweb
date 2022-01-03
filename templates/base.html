@@ -13,8 +13,9 @@
     {% block content %}
     <!-- content -->
     {% endblock %}
-    {% include 'footer.html' %}
     <!-- 기본 템플릿 안에 삽입될 내용 end -->
+    {% include 'footer.html' %}
+    <!-- footer 추가 -->
     <script src="{% static 'board/js/jquery-3.6.0.js' %}"></script>
     <script src="{% static 'board/js/bootstrap.js' %}"></script>
     {% block script %}

@@ -5,8 +5,8 @@
     <h5 class="border-bottom my-3 pb-2">질문 등록</h5>
     <form action="" method="post">
         {% csrf_token %}
-        <!-- 오류 표시 시작 -->
         {% if form.errors %}
+        <!-- 오류 표시 시작 -->
         <div class="alert alert-danger">
             {% for field in form %}
                 {% if field.errors %}
@@ -17,7 +17,7 @@
         </div>
         {% endif %}
         <!-- 오류 표시 끝-->
-    <!-- {{ form.as_p }} 폼 형태를 쉽게 만들어주는 템플릿 태그-->
+        <!-- {{ form.as_p }} 폼 형태를 쉽게 만들어주는 템플릿 태그-->
         <div class="form-group">
             <label for="subject">제목 : </label>
             <input type="text" name="subject" id="subject" class="form-control"

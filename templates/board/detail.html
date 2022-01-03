@@ -65,11 +65,10 @@
                             {% if request.user == comment.author %}
                             <!-- 제이쿼리 사용 -->
                             <a href="{% url 'board:comment_modify_question' comment.id %}">수정</a>
-                            <!-- <a href="#" class="delete" data-uri="{% url 'board:comment_delete_question' comment.id %}">삭제</a>-->
-
+                             <a href="#" class="delete" data-uri="{% url 'board:comment_delete_question' comment.id %}">삭제</a>
                             <!-- 자바스크립트 사용-->
-                            <a onclick="return confirm('정말로 삭제하시겠습니까?')"
-                               href="{% url 'board:comment_delete_question' question.id %}">삭제</a>
+<!--                            <a onclick="return confirm('정말로 삭제하시겠습니까?')"-->
+<!--                               href="{% url 'board:comment_delete_question' comment.id %}">삭제</a>-->
                             {% endif %}
                         </div>
                         {% endfor %}
